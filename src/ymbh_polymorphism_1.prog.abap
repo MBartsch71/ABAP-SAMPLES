@@ -34,9 +34,10 @@ CLASS flight_plan DEFINITION.
         city_from     TYPE s_from_cit
       RETURNING
         VALUE(result) TYPE abap_bool.
+
     METHODS get_time_zone_city
       IMPORTING
-        icity_from      TYPE s_from_cit
+        city_from      TYPE s_from_cit
       RETURNING
         VALUE(timezone) TYPE s_tzone.
 
