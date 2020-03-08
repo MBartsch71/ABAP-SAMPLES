@@ -1,4 +1,4 @@
-REPORT ymbh_polymorphism.
+REPORT ymbh_polymorphism_1.
 
 CLASS cx_city_without_airport DEFINITION INHERITING FROM cx_static_check.
 
