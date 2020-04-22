@@ -4,6 +4,10 @@ CLASS lcl_ticket DEFINITION ABSTRACT.
 
   PUBLIC SECTION.
 
+    "! <p class="shorttext synchronized">Constructor for the ticket class</p>
+    "! @parameter location | <p class="shorttext synchronized">Location for the ticket event</p>
+    "! @parameter name | <p class="shorttext synchronized">Name of the event</p>
+    "! @parameter price | <p class="shorttext synchronized">Base price of the ticket</p>
     METHODS constructor
       IMPORTING
         location TYPE string
