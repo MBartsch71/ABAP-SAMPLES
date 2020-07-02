@@ -58,6 +58,9 @@ CLASS lcl_main IMPLEMENTATION.
     DATA(lo_handler) = lcl_ophandler=>factory( 'ABC' ).
     lo_handler->process_output( ).
 
+    lo_handler = lcl_ophandler=>factory( 'XYZ' ).
+    lo_handler->process_output( ).
+
   ENDMETHOD.
 
 ENDCLASS.
