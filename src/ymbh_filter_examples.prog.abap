@@ -1,9 +1,10 @@
 REPORT ymbh_filter_example.
 
 CLASS lcl_filter_example DEFINITION FINAL.
+
   PUBLIC SECTION.
     TYPES tt_sorted_email_addresses TYPE SORTED TABLE OF bapiadsmtp WITH UNIQUE KEY primary_key COMPONENTS e_mail valid_from
-    WITH NON-UNIQUE SORTED KEY date_from COMPONENTS valid_from.
+                                                                    WITH NON-UNIQUE SORTED KEY date_from COMPONENTS valid_from.
 
     METHODS constructor                IMPORTING it_incoming_email_addresses TYPE tt_sorted_email_addresses
                                                  it_existing_email_addresses TYPE tt_sorted_email_addresses.
@@ -17,6 +18,7 @@ CLASS lcl_filter_example DEFINITION FINAL.
   PRIVATE SECTION.
     DATA mt_incoming_email_addresses TYPE tt_sorted_email_addresses.
     DATA mt_existing_email_addresses TYPE tt_sorted_email_addresses.
+
 ENDCLASS.
 
 CLASS lcl_filter_example IMPLEMENTATION.
@@ -28,7 +30,7 @@ CLASS lcl_filter_example IMPLEMENTATION.
 
   METHOD filter_emails_loop_at.
     LOOP AT mt_incoming_email_addresses ASSIGNING FIELD-SYMBOL(<email_address>).
-      READ TABLE mt_existing_email_addresses WITH KEY e_mail = <email_address>-e_mail
+      READ TABLE mt_existing_email_addresses WITH KEY e_mail     = <email_address>-e_mail
                                                       valid_from = <email_address>-valid_from TRANSPORTING NO FIELDS.
       IF sy-subrc <> 0.
         APPEND <email_address> TO rt_result.
@@ -38,7 +40,7 @@ CLASS lcl_filter_example IMPLEMENTATION.
 
   METHOD filter_emails_lookup_table.
     rt_result = FILTER #( mt_incoming_email_addresses EXCEPT IN mt_existing_email_addresses
-                                                      WHERE e_mail = e_mail AND
+                                                      WHERE e_mail     = e_mail AND
                                                             valid_from = valid_from ).
   ENDMETHOD.
 
@@ -83,9 +85,8 @@ CLASS ltc_filter_with IMPLEMENTATION.
                                                                                       valid_from = |20001023| ) ).
 
     cl_abap_unit_assert=>assert_equals(
-          exp = lt_expected_emails
-          act = mo_cut->filter_emails_loop_at( ) ).
-
+        exp = lt_expected_emails
+        act = mo_cut->filter_emails_loop_at( ) ).
   ENDMETHOD.
 
   METHOD extract_values_lookup_table.
@@ -93,17 +94,16 @@ CLASS ltc_filter_with IMPLEMENTATION.
                                                                                       valid_from = |20001023| ) ).
 
     cl_abap_unit_assert=>assert_equals(
-          exp = lt_expected_emails
-          act = mo_cut->filter_emails_lookup_table( ) ).
-
+        exp = lt_expected_emails
+        act = mo_cut->filter_emails_lookup_table( ) ).
   ENDMETHOD.
 
   METHOD extract_values_filter_where.
     DATA(lt_expected_emails) = VALUE lcl_filter_example=>tt_sorted_email_addresses( ( e_mail     = |james.bond@mi6.com|
                                                                                       valid_from = |19700101| ) ).
     cl_abap_unit_assert=>assert_equals(
-    exp = lt_expected_emails
-    act = mo_cut->filter_email_where( ) ).
+        exp = lt_expected_emails
+        act = mo_cut->filter_email_where( ) ).
   ENDMETHOD.
 
 ENDCLASS.
