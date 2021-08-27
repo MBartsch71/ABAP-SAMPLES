@@ -8,4 +8,4 @@ This is a collection of some ABAP samples
 ### Value expression
 The VALUE expression in the new ABAP syntax is quite powerful. The following source code shows some examples along with the "old" way.
 
-(/src/ymbh_value_examples.prog.abap)
+[YMBH_VALUE_EXAMPLES](/src/ymbh_value_examples.prog.abap)
