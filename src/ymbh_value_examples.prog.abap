@@ -1,6 +1,5 @@
 REPORT ymbh_value_examples.
 
-
 CLASS lcl_value_example DEFINITION FINAL.
 
   PUBLIC SECTION.
@@ -38,7 +37,6 @@ CLASS lcl_value_example DEFINITION FINAL.
     METHODS actor_is_special IMPORTING is_value         TYPE ts_name
                              RETURNING VALUE(rv_result) TYPE abap_bool.
 
-
 ENDCLASS.
 
 CLASS lcl_value_example IMPLEMENTATION.
@@ -47,6 +45,7 @@ CLASS lcl_value_example IMPLEMENTATION.
     rt_result = VALUE #( ( |James| )
                          ( |Bond|  ) ).
   ENDMETHOD.
+
 
   METHOD seven_lines_old_style.
     DATA lv_line TYPE string.
@@ -121,8 +120,6 @@ CLASS lcl_value_example IMPLEMENTATION.
 
 ENDCLASS.
 
-
-
 CLASS ltc_value_examples DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
@@ -144,7 +141,6 @@ CLASS ltc_value_examples DEFINITION FINAL FOR TESTING
     METHODS value_cond_wrong_way     FOR TESTING.
 
 ENDCLASS.
-
 
 CLASS ltc_value_examples IMPLEMENTATION.
 
