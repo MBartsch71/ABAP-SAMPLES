@@ -6,12 +6,14 @@ CLASS lcl_filter_example DEFINITION FINAL.
     TYPES tt_sorted_email_addresses TYPE SORTED TABLE OF bapiadsmtp WITH UNIQUE KEY primary_key COMPONENTS e_mail valid_from
                                                                     WITH NON-UNIQUE SORTED KEY date_from COMPONENTS valid_from.
 
+    TYPES tt_email_addresses        TYPE STANDARD TABLE OF bapiadsmtp WITH NON-UNIQUE KEY e_mail.
+
     METHODS constructor                IMPORTING it_incoming_email_addresses TYPE tt_sorted_email_addresses
-                                                 it_existing_email_addresses TYPE tt_sorted_email_addresses.
+                                                 it_existing_email_addresses TYPE tt_email_addresses.
 
     METHODS filter_emails_loop_at      RETURNING VALUE(rt_result) TYPE tt_sorted_email_addresses.
 
-    METHODS filter_emails_lookup_table RETURNING VALUE(rt_result) TYPE tt_sorted_email_addresses.
+    METHODS filter_emails_lookup_table RETURNING VALUE(rt_result) TYPE tt_email_addresses.
 
     METHODS filter_email_where         RETURNING VALUE(rt_result) TYPE tt_sorted_email_addresses.
 
@@ -73,8 +75,8 @@ CLASS ltc_filter_with IMPLEMENTATION.
                                                                                              ( e_mail     = |q.tinkerer@mi6.com|
                                                                                                valid_from = |20001023| ) ).
 
-    DATA(lt_existing_email_addresses) = VALUE lcl_filter_example=>tt_sorted_email_addresses( ( e_mail     = |james.bond@mi6.com|
-                                                                                               valid_from = |19700101| ) ).
+    DATA(lt_existing_email_addresses) = VALUE lcl_filter_example=>tt_email_addresses( ( e_mail     = |james.bond@mi6.com|
+                                                                                        valid_from = |19700101| ) ).
     mo_cut = NEW #( it_incoming_email_addresses = lt_incoming_email_addresses
                     it_existing_email_addresses = lt_existing_email_addresses ).
 
