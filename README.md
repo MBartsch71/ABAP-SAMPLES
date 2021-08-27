@@ -1,4 +1,11 @@
 # ABAP SAMPLES
  Sample programming
 
-Added 1 line to readme
+This is a collection of some ABAP samples
+
+
+## Explanation of functional ABAP
+### Value expression
+The VALUE expression in the new ABAP syntax is quite powerful. The following source code shows some examples along with the "old" way.
+
+(/src/ymbh_value_examples.prog.abap)
