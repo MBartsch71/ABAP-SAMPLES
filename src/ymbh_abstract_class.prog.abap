@@ -8,18 +8,14 @@ CLASS lcl_ticket DEFINITION ABSTRACT.
     "! @parameter location | <p class="shorttext synchronized">Location for the ticket event</p>
     "! @parameter name | <p class="shorttext synchronized">Name of the event</p>
     "! @parameter price | <p class="shorttext synchronized">Base price of the ticket</p>
-    METHODS constructor
-      IMPORTING
-        location TYPE string
-        name     TYPE string
-        price    TYPE f.
+    METHODS constructor IMPORTING location TYPE string
+                                  name     TYPE string
+                                  price    TYPE f.
 
     METHODS calculate_ticket_price ABSTRACT.
     METHODS print_ticket_data.
     METHODS build_ticket_data.
-    METHODS get_ticket_data
-      RETURNING
-        VALUE(r_result) TYPE string.
+    METHODS get_ticket_data RETURNING VALUE(r_result) TYPE string.
 
   PROTECTED SECTION.
 
@@ -43,7 +39,7 @@ CLASS lcl_ticket IMPLEMENTATION.
 
   METHOD print_ticket_data.
     build_ticket_data( ).
-    cl_demo_output=>display_text( ticket_data ).
+    cl_demo_output=>write_text( ticket_data ).
   ENDMETHOD.
 
   METHOD build_ticket_data.
@@ -61,12 +57,10 @@ ENDCLASS.
 CLASS lcl_sport_ticket DEFINITION INHERITING FROM lcl_ticket.
 
   PUBLIC SECTION.
-    METHODS constructor
-      IMPORTING
-        location TYPE string
-        name     TYPE string
-        price    TYPE f
-        level    TYPE i.
+    METHODS constructor  IMPORTING location TYPE string
+                                   name     TYPE string
+                                   price    TYPE f
+                                   level    TYPE i.
     METHODS calculate_ticket_price REDEFINITION.
 
   PRIVATE SECTION.
@@ -85,6 +79,38 @@ CLASS lcl_sport_ticket IMPLEMENTATION.
 
   METHOD calculate_ticket_price.
     ticket_price = base_price + ( 10 * cup_level ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lcl_concert_ticket DEFINITION INHERITING FROM lcl_ticket.
+
+  PUBLIC SECTION.
+    METHODS constructor            IMPORTING location TYPE string
+                                             name     TYPE string
+                                             price    TYPE f
+                                             row      TYPE i.
+
+    METHODS calculate_ticket_price REDEFINITION.
+
+  PRIVATE SECTION.
+    DATA seat_row TYPE i.
+
+ENDCLASS.
+
+CLASS lcl_concert_ticket IMPLEMENTATION.
+
+  METHOD constructor.
+    super->constructor( location = location
+                        name     = name
+                        price    = price ).
+    seat_row = row.
+  ENDMETHOD.
+
+  METHOD calculate_ticket_price.
+    DATA additions TYPE f.
+    additions =  1 + ( 1 / seat_row ).
+    ticket_price = base_price * additions.
   ENDMETHOD.
 
 ENDCLASS.
@@ -116,41 +142,6 @@ CLASS ltc_sport_ticket IMPLEMENTATION.
 
 ENDCLASS.
 
-
-CLASS lcl_concert_ticket DEFINITION INHERITING FROM lcl_ticket.
-
-  PUBLIC SECTION.
-    METHODS constructor
-      IMPORTING
-        location TYPE string
-        name     TYPE string
-        price    TYPE f
-        row      TYPE i.
-
-    METHODS calculate_ticket_price REDEFINITION.
-
-  PRIVATE SECTION.
-    DATA seat_row TYPE i.
-
-ENDCLASS.
-
-CLASS lcl_concert_ticket IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( location = location
-                        name     = name
-                        price    = price ).
-    seat_row = row.
-  ENDMETHOD.
-
-  METHOD calculate_ticket_price.
-    DATA additions TYPE f.
-    additions =  1 + ( 1 / seat_row ).
-    ticket_price = base_price * additions.
-  ENDMETHOD.
-
-ENDCLASS.
-
 CLASS ltc_concert_ticket DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
@@ -159,7 +150,6 @@ CLASS ltc_concert_ticket DEFINITION FINAL FOR TESTING
     METHODS build_valid_ticket_data FOR TESTING.
 
 ENDCLASS.
-
 
 CLASS ltc_concert_ticket IMPLEMENTATION.
 
@@ -186,21 +176,21 @@ ENDCLASS.
 CLASS lcl_main IMPLEMENTATION.
 
   METHOD run.
-    DATA(sport_ticket) = NEW lcl_sport_ticket(
-      location = |Luzern|
-      name     = |SuperLigue|
-      price    = 10
-      level    = 7 ).
+    DATA(sport_ticket) = NEW lcl_sport_ticket( location = |Luzern|
+                                               name     = |SuperLigue|
+                                               price    = 10
+                                               level    = 7 ).
     sport_ticket->calculate_ticket_price( ).
     sport_ticket->print_ticket_data( ).
 
-    DATA(concert_ticket) = NEW lcl_concert_ticket(
-      location = |Zürich|
-      name     = |System of a down|
-      price    = 90
-      row      = 5 ).
+    DATA(concert_ticket) = NEW lcl_concert_ticket( location = |Zürich|
+                                                   name     = |System of a down|
+                                                   price    = 90
+                                                   row      = 5 ).
     concert_ticket->calculate_ticket_price( ).
     concert_ticket->print_ticket_data( ).
+
+    cl_demo_output=>display( ).
 
   ENDMETHOD.
 
@@ -208,5 +198,4 @@ ENDCLASS.
 
 
 START-OF-SELECTION.
-  DATA(main) = NEW lcl_main( ).
-  main->run( ).
+  NEW lcl_main( )->run( ).
