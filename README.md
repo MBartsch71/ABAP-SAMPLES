@@ -5,6 +5,10 @@ This is a collection of some ABAP samples
 
 
 ## Explanation of functional ABAP
+### Corresponding
+
+[YMBH_CORRESPONDING_EXAMPLES](/src/ymbh_corresponding_examples.prog.abap)
+
 ### Value expression
 The VALUE expression in the new ABAP syntax is quite powerful. The following source code shows some examples along with the "old" way.
 
