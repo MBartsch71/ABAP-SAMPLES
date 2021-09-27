@@ -21,17 +21,27 @@ CLASS lcl_value_example DEFINITION FINAL.
     METHODS seven_lines_new_style     RETURNING VALUE(rt_result) TYPE stringtab.
     METHODS seven_lines_old_style     RETURNING VALUE(rt_result) TYPE stringtab.
 
+
     METHODS transfer_old_style        IMPORTING it_input_values  TYPE lcl_value_example=>tt_names
                                       RETURNING VALUE(rt_result) TYPE lcl_value_example=>tt_name_records.
+
     METHODS transfer_new_style        IMPORTING it_input_values  TYPE lcl_value_example=>tt_names
                                       RETURNING VALUE(rt_result) TYPE lcl_value_example=>tt_name_records.
 
+
     METHODS extract_actors_old_style  IMPORTING it_input_values  TYPE lcl_value_example=>tt_names
                                       RETURNING VALUE(rt_result) TYPE lcl_value_example=>tt_name_records.
+
     METHODS extract_actors_cond_value IMPORTING it_input_values  TYPE lcl_value_example=>tt_names
                                       RETURNING VALUE(rt_result) TYPE lcl_value_example=>tt_name_records.
+
     METHODS extract_actors_new_style  IMPORTING it_input_values  TYPE lcl_value_example=>tt_names
                                       RETURNING VALUE(rt_result) TYPE lcl_value_example=>tt_name_records.
+
+
+    METHODS fizzbuzz                  IMPORTING iv_start         TYPE i
+                                                iv_end           TYPE i
+                                      RETURNING VALUE(rt_result) TYPE stringtab.
 
   PRIVATE SECTION.
     METHODS actor_is_special IMPORTING is_value         TYPE ts_name
@@ -118,6 +128,15 @@ CLASS lcl_value_example IMPLEMENTATION.
                          is_value-surname = |Craig| ).
   ENDMETHOD.
 
+
+  METHOD fizzbuzz.
+    rt_result = VALUE stringtab( FOR i = iv_start WHILE i <= iv_end
+                                 ( COND #( WHEN i MOD 5 = 0 AND i MOD 3 = 0 THEN |FizzBuzz|
+                                           WHEN i MOD 5 = 0 THEN |Buzz|
+                                           WHEN i MOD 3 = 0 THEN |Fizz|
+                                           ELSE |{ i }| ) ) ).
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltc_value_examples DEFINITION FINAL FOR TESTING
@@ -139,6 +158,8 @@ CLASS ltc_value_examples DEFINITION FINAL FOR TESTING
     METHODS extract_values_old_style FOR TESTING.
     METHODS value_with_lines_of      FOR TESTING.
     METHODS value_cond_wrong_way     FOR TESTING.
+
+    METHODS short_fizzbuzz_till_30   FOR TESTING.
 
 ENDCLASS.
 
@@ -271,6 +292,19 @@ CLASS ltc_value_examples IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
         exp = lt_expected_values
         act = mo_cut->extract_actors_new_style( lt_input_values ) ).
+  ENDMETHOD.
+
+  METHOD short_fizzbuzz_till_30.
+    DATA(lt_expected_values) = VALUE stringtab( ( |1| )    ( |2| )    ( |Fizz| ) ( |4| )    ( |Buzz| )
+                                                ( |Fizz| ) ( |7| )    ( |8| )    ( |Fizz| ) ( |Buzz| )
+                                                ( |11| )   ( |Fizz| ) ( |13| )   ( |14| )   ( |FizzBuzz| )
+                                                ( |16| )   ( |17| )   ( |Fizz| ) ( |19| )   ( |Buzz| )
+                                                ( |Fizz| ) ( |22| )   ( |23| )   ( |Fizz| ) ( |Buzz| )
+                                                ( |26| )   ( |Fizz| ) ( |28| )   ( |29| )   ( |FizzBuzz| ) ).
+    cl_abap_unit_assert=>assert_equals(
+        exp = lt_expected_values
+        act = mo_cut->fizzbuzz( iv_start = 1 iv_end   = 30 ) ).
+
   ENDMETHOD.
 
 ENDCLASS.
